@@ -14,5 +14,5 @@ RUN wget -O kindlegen.tar.gz http://kindlegen.s3.amazonaws.com/kindlegen_linux_2
   && tar xf kindlegen.tar.gz -C /usr/bin/ \
   && rm kindlegen.tar.gz
 WORKDIR /usr/src/app
-COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl .
-CMD ["./debug/kindlegen-as-a-service"]
+COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/debug/kindlegen-as-a-service .
+CMD ["./kindlegen-as-a-service"]
