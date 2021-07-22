@@ -1,5 +1,5 @@
-FROM clux/muslrust as builder
-#RUN rustup target add x86_64-unknown-linux-musl
+FROM rust:1.53-alpine as builder
+RUN apk add --no-cache musl-dev
 WORKDIR /usr/src/app
 COPY Cargo.toml .
 RUN mkdir -p ./src \
@@ -10,9 +10,7 @@ COPY . .
 RUN cargo build --target x86_64-unknown-linux-musl
 
 FROM alpine:3.7
-RUN wget -O kindlegen.tar.gz http://kindlegen.s3.amazonaws.com/kindlegen_linux_2.6_i386_v2_9.tar.gz \
-  && tar xf kindlegen.tar.gz -C /usr/bin/ \
-  && rm kindlegen.tar.gz
+ADD kindlegen /usr/bin/
 WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/debug/kindlegen-as-a-service .
 CMD ["./kindlegen-as-a-service"]
