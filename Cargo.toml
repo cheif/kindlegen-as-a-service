@@ -6,3 +6,4 @@ authors = [ "Dan Berglund <dan@berglund.io" ]
 
 [dependencies]
 rouille = "3.0.0"
+uuid = { version = "0.8", features = ["v4"] }
