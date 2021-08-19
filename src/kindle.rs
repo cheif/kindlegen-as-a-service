@@ -1,6 +1,7 @@
 use std::process::Command;
 use std::fs;
 use std::str;
+use std::path::Path;
 use uuid::Uuid;
 
 pub fn convert(buf: Vec<u8>) -> Result<fs::File, String> {
@@ -15,9 +16,10 @@ pub fn convert(buf: Vec<u8>) -> Result<fs::File, String> {
     let output = Command::new("kindlegen")
         .arg(epub_file)
         .output()
-        .map_err(|_| "Kindlegen run failed")?;
+        .map_err(|err| format!("Kindlegen run failed: {}", err))?;
 
-    if !output.status.success() {
+    // Kindlegen sometimes exits with 1 but still manages to generate a file (when there are warnings)
+    if !Path::new(&mobi_file).exists() {
         return Err(str::from_utf8(&output.stdout).unwrap().to_string())
     }
 
@@ -40,8 +42,14 @@ mod tests {
     fn incorrect_language_code_epub() {
         let buf = std::fs::read("testdata/pottraning_pa_3_daga.epub").unwrap();
         let res = convert(buf);
-        println!("{:?}", res);
         assert!(res.is_err());
+    }
+
+    #[test]
+    fn warnings_epub() {
+        let buf = std::fs::read("testdata/de_aderton.epub").unwrap();
+        let res = convert(buf);
+        assert!(res.is_ok());
     }
 }
 
