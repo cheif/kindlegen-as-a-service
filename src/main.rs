@@ -3,6 +3,7 @@ extern crate rouille;
 extern crate uuid;
 extern crate log;
 extern crate simple_logger;
+extern crate infer;
 
 use std::fs;
 use std::io::Read;

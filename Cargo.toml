@@ -9,3 +9,4 @@ rouille = "3.0.0"
 uuid = { version = "0.8", features = ["v4"] }
 log = "0.4.13"
 simple_logger = "2.0.0"
+infer =  { version = "0.3", default-features = false }
