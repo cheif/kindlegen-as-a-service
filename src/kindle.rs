@@ -18,8 +18,8 @@ pub fn convert(buf: Vec<u8>) -> Result<fs::File, String> {
     info!("mime-type: {}", kind.mime_type());
     let extension = match kind.mime_type() {
         "application/pdf" => Ok(kind.extension()),
-        // Epub files are just zipfiles, so we can't really distinguish them from other zipfiles,
-        // let's just hope for the best.
+        "application/epub+zip" => Ok(kind.extension()),
+        // Epub files might have the zip mime-type, so we just assume these are epub.
         "application/zip" => Ok("epub"),
         _ => Err(format!("Unsupported mime-type: {}", kind.mime_type()))
     }?;
